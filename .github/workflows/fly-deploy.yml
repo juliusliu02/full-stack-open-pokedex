@@ -5,10 +5,15 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize ]
+
 jobs:
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     concurrency: deploy-group    # optional: ensure only one action runs at a time
     steps:
       - uses: actions/checkout@v4
