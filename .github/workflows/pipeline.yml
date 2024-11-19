@@ -44,7 +44,7 @@ jobs:
   tag_release:
     env:
       SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
-    if: ${{ github.event_name == 'push' && env.SKIP == 'false'}}
+    if: ${{ github.event_name == 'push' && github.env.SKIP == 'false'}}
     needs: [ simple_deployment_pipeline ]
     runs-on: ubuntu-20.04
     permissions:
