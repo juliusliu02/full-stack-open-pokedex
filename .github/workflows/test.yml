@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  CONDITION: ${{ contains(join(github.event.commits.*.messages, ' '), '#skip') }}
+  CONDITION: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
 
 jobs:
   a_test_job:
