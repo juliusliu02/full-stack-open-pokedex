@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - feature/pr
+
+env:
+  SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
+
+jobs:
+  tag_release:
+    if: ${{ github.event_name == 'push' && github.env.SKIP == 'false' }}
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.71.0 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+          DEFAULT_BUMP: "patch"
+      - name: New version alert
+        uses: rjstone/discord-webhook-notify@v1.0.0
+        if: success()
+        with:
+          severity: info
+          details: A new version is deployed successfully!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
