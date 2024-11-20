@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - feature/pr
+  schedule:
+    - cron: "15 * * * *"
 
 jobs:
   HealthCheck:
