@@ -1,0 +1,20 @@
+name: some workflow name
+
+env:
+  # the below will be 'true'
+  CONDITION: ${{ contains('kissa', 'ss') && contains('koira', 'ra') && contains('pretty long array of criteria to repeat in multiple places', 'crit') }}
+
+jobs:
+  job1:
+    # rest of the job
+    steps:
+      - if: ${{ env.CONDITION == 'true' }}
+        run: echo 'this step is executed'
+
+      - if: ${{ env.CONDITION == 'false' }}
+        run: echo 'this step will not be executed'
+
+  job2:
+    # this job will be dependent on the above env.CONDITION, note the `github.` prefix which seem to be required while referencing the variable on the job level, but not the step level
+    if: ${{ github.env.CONDITION == 'true' }}
+    # rest of the job
