@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - run: echo ${{ env.SKIP }}
+  testEvent:
+    if: ${{ github.event_name == 'push'}}
+    runs-on: ubuntu-20.04
+    steps:
+      - run: echo ${{ github.env }}
   tag_release:
     if: ${{ github.event_name == 'push' && github.env.SKIP == 'false' }}
     runs-on: ubuntu-20.04
