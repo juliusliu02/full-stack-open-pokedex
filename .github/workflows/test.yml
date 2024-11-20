@@ -5,33 +5,31 @@ on:
     branches:
       - feature/pr
 
+env:
+  COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message), ' ') }}
+  SKIP: ${{ contains(join(toJson(github.event.commits.*.message), ' '), '#skip') }}
+
 jobs:
   print:
     runs-on: ubuntu-20.04
     steps:
-      - run: echo ${{ env.SKIP }}
+      - run: echo "$COMMIT_MESSAGES"
+      - run: echo "$SKIP"
   testSkipTrue:
-    env:
-      SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
     if: ${{ github.env.SKIP == 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$SKIP"
-      - run: echo
   testSkipNotTrue:
-    env:
-      SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
     if: ${{ github.env.SKIP != 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$skip"
   testSkipFalse:
-    env:
-      SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
     if: ${{ github.env.SKIP == 'false'  }}
     runs-on: ubuntu-20.04
     steps:
-      - run: echo ${{ github.env }}
+      - run: echo "$SKIP"
 
   tag_release:
     if: ${{ github.event_name == 'push' && github.env.SKIP == 'false' }}
