@@ -22,6 +22,13 @@ jobs:
         run: npm run eslint
       - name: Build
         run: npm run build
+      - name: Test Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          details: Build failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Run tests
         run: npm run test
       - name: Install Playwright Browsers
@@ -41,6 +48,7 @@ jobs:
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
   tag_release:
     env:
       SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
@@ -53,9 +61,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
-
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.71.0 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
           DEFAULT_BUMP: "patch"
+      - name: New version alert
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+          severity: info
+          details: A new version is deployed successfully!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
