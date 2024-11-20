@@ -3,11 +3,6 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'full-stack-open-pokedex-green-rain-7837'
-primary_region = 'yul'
-
-[build]
-
 [env]
   PORT = "3000" # add this
 
@@ -24,11 +19,6 @@ primary_region = 'yul'
 
 [deploy]
   strategy = "canary"
-
-[[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
 
 [[http_service.checks]]
   grace_period = "10s"
