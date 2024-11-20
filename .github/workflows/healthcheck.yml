@@ -6,7 +6,7 @@ on:
       - main
       - feature/pr
   schedule:
-    - cron: "15 * * * *"
+    - cron: "15,55 * * * *"
 
 jobs:
   HealthCheck:
