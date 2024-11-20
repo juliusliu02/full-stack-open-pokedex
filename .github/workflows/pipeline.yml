@@ -59,11 +59,13 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - if: ${{ env.SKIP == 'true' }}
+        uses: actions/checkout@v4
         with:
           fetch-depth: '0'
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.71.0 # Don't use @master or @v1 unless you're happy to test the latest version
+        if: ${{ env.SKIP == 'true' }}
+        uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
           DEFAULT_BUMP: "patch"
