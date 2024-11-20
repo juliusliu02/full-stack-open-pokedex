@@ -7,7 +7,7 @@ on:
 
 env:
   COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message), ' ') }}
-  SKIP: ${{ contains(join(toJson(github.event.commits.*.message), ' '), '#skip') }}
+  SKIP_CONDITION: ${{ contains(join(toJson(github.event.commits.*.message), ' '), '#skip') }}
 
 jobs:
   print:
@@ -16,17 +16,17 @@ jobs:
       - run: echo "$COMMIT_MESSAGES"
       - run: echo "$SKIP"
   testSkipTrue:
-    if: ${{ github.env.SKIP == 'true' }}
+    if: ${{ github.env.SKIP_CONDITION == 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$SKIP"
   testSkipNotTrue:
-    if: ${{ github.env.SKIP != 'true' }}
+    if: ${{ github.env.SKIP_CONDITION != 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$skip"
   testSkipFalse:
-    if: ${{ github.env.SKIP == 'false'  }}
+    if: ${{ github.env.SKIP_CONDITION == 'false'  }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$SKIP"
