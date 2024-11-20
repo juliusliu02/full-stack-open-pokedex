@@ -6,7 +6,8 @@ on:
       - feature/pr
 
 env:
-  COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message), ' ') }}
+  COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
+  CONTAIN: ${{ contains(join((github.event.commits.*.message), ' '), '#skip') }}
   SKIP_CONDITION: ${{ contains(join(toJson(github.event.commits.*.message), ' '), '#skip') }}
 
 jobs:
@@ -14,7 +15,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$COMMIT_MESSAGES"
-      - run: echo "$SKIP"
+      - run: echo "$CONTAIN"
+      - run: echo "$SKIP_CONDITION"
   testSkipTrue:
     if: ${{ github.env.SKIP_CONDITION == 'true' }}
     runs-on: ubuntu-20.04
