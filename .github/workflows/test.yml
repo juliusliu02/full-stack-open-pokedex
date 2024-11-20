@@ -17,12 +17,13 @@ jobs:
     if: ${{ github.env.SKIP == 'true' }}
     runs-on: ubuntu-20.04
     steps:
-      - run: echo ${{ github.env }}
+      - run: echo ${{ github.env.SKIP }}
   testSkipNotTrue:
     if: ${{ github.env.SKIP != 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo ${{ github.env }}
+
   testSkipFalse:
     if: ${{ github.env.SKIP == 'false'  }}
     runs-on: ubuntu-20.04
