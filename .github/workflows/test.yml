@@ -5,26 +5,30 @@ on:
     branches:
       - feature/pr
 
-env:
-  SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
-
 jobs:
   print:
     runs-on: ubuntu-20.04
     steps:
       - run: echo ${{ env.SKIP }}
   testSkipTrue:
+    env:
+      SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
     if: ${{ github.env.SKIP == 'true' }}
     runs-on: ubuntu-20.04
     steps:
-      - run: echo ${{ github.env.SKIP }}
+      - run: echo "$SKIP"
+      - run: echo
   testSkipNotTrue:
+    env:
+      SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
     if: ${{ github.env.SKIP != 'true' }}
     runs-on: ubuntu-20.04
     steps:
-      - run: echo ${{ github.env }}
+      - run: echo "$env.skip"
 
   testSkipFalse:
+    env:
+      SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
     if: ${{ github.env.SKIP == 'false'  }}
     runs-on: ubuntu-20.04
     steps:
