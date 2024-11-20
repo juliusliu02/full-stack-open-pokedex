@@ -13,7 +13,7 @@ jobs:
   testSkipTrue:
     env:
       SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
-    if: ${{ env.SKIP == 'true' }}
+    if: ${{ github.env.SKIP == 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "$SKIP"
@@ -24,11 +24,11 @@ jobs:
     if: ${{ github.env.SKIP != 'true' }}
     runs-on: ubuntu-20.04
     steps:
-      - run: echo "$env.skip"
+      - run: echo "$skip"
   testSkipFalse:
     env:
       SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
-    if: ${{ env.SKIP == 'false'  }}
+    if: ${{ github.env.SKIP == 'false'  }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo ${{ github.env }}
